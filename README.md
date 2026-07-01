@@ -1,8 +1,8 @@
-# MOJI Pet — Flutter MVP
+# MOJI Pet — Flutter
 
-MOJI é um pet virtual em Flutter inspirado na lógica de um robô companheiro: ele pisca, muda de humor, reage a toque, fica com fome, perde energia, ganha carinho, fala em português e evolui de nível.
+MOJI é um pet virtual em Flutter inspirado na lógica de um robô companheiro: ele pisca, muda de humor, reage a toque, fica com fome, perde energia, ganha carinho, fala em português, salva memória local e evolui de nível.
 
-Este MVP não usa hardware. A ideia é transformar a lógica de um robô físico em um app 100% virtual.
+Este app não usa hardware. A lógica do robô físico foi portada para uma experiência 100% virtual.
 
 ## O que já vem pronto
 
@@ -10,6 +10,20 @@ Este MVP não usa hardware. A ideia é transformar a lógica de um robô físico
 - Voz em português do Brasil usando `flutter_tts`.
 - Falas contextuais para toque, cutucada, comida, brincadeira, sono, impacto, fome e conversa.
 - Botão de ligar/desligar voz no topo da tela.
+- Memória local com `shared_preferences`: fome, energia, carinho, diversão, XP, nível, humor e última interação.
+- Recuperação de tempo offline: quando o usuário volta depois de um tempo, o MOJI percebe que ficou esperando.
+- Perfis de animação portados da referência:
+  - `bootup3` — 124 frames de referência
+  - `neutral` — 61 frames de referência
+  - `blink` — 39 frames de referência
+  - `blink2` — 20 frames de referência
+  - `happy` — 60 frames de referência
+  - `happy2` — 20 frames de referência
+  - `happy3` — 26 frames de referência
+  - `sad` — 47 frames de referência
+  - `dizzy` — 67 frames de referência
+  - `excited` — 24 frames de referência
+  - `angry` — 20 frames de referência
 - Sistema de humor:
   - neutro
   - feliz
@@ -39,6 +53,10 @@ A referência open-source `CodersCafeTech/Emo` chama arquivos `.wav` locais em `
 
 A licença da referência é CC BY-NC 4.0, então qualquer uso direto daquele material deve manter atribuição e não pode ser comercial.
 
+## Sobre IA
+
+O repositório open-source de referência não traz um modelo de IA ou integração LLM real. O que existia era uma lógica de eventos: toque, vibração, fila de emoção, rosto, som e movimento. No MOJI foi adicionada uma camada local de planejamento de diálogo em `moji_dialog_planner.dart`, que escolhe falas conforme fome, energia, carinho, diversão e nível. Uma IA real via API ainda pode ser adicionada depois.
+
 ## Como rodar
 
 Se você ainda não criou as plataformas Android/iOS/Web, entre na pasta do projeto e rode:
@@ -57,11 +75,14 @@ Se o Flutter perguntar se deve sobrescrever arquivos, preserve a pasta `lib/` e 
 lib/
 ├── main.dart
 ├── services/
+│   ├── moji_memory_service.dart
 │   └── moji_speech_service.dart
 └── features/
     └── moji_pet/
         ├── domain/
+        │   ├── moji_animation.dart
         │   ├── moji_brain.dart
+        │   ├── moji_dialog_planner.dart
         │   ├── moji_lines.dart
         │   └── moji_mood.dart
         ├── presentation/
@@ -69,19 +90,19 @@ lib/
         └── widgets/
             ├── moji_action_button.dart
             ├── moji_character.dart
+            ├── moji_character_anim.dart
             ├── moji_dialog_bubble.dart
             └── moji_stat_bar.dart
 ```
 
 ## Próximos passos recomendados
 
-1. Adicionar persistência local para salvar fome, energia, nível e última interação.
-2. Adicionar efeitos sonoros originais próprios para cada emoção.
-3. Criar animações mais avançadas com Rive, Lottie ou sprites.
-4. Adicionar sensor de movimento real com `sensors_plus` para detectar quando o usuário chacoalha o celular.
-5. Adicionar modo conversa com IA real via API configurável.
+1. Adicionar efeitos sonoros originais próprios para cada emoção.
+2. Criar animações mais avançadas com Rive, Lottie ou sprites.
+3. Adicionar sensor de movimento real com `sensors_plus` para detectar quando o usuário chacoalha o celular.
+4. Adicionar modo conversa com IA real via API configurável.
+5. Adicionar notificações: “MOJI está com fome”, “MOJI quer brincar”.
 6. Adicionar loja de acessórios visuais para o MOJI.
-7. Adicionar notificações: “MOJI está com fome”, “MOJI quer brincar”.
 
 ## Identidade visual
 
