@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
+import 'moji_lines.dart';
 import 'moji_mood.dart';
 
 class MojiBrain extends ChangeNotifier {
   final Random _random = Random();
 
-  MojiMood mood = MojiMood.neutral;
-  String message = MojiMood.neutral.defaultMessage;
+  MojiMood mood = MojiMood.curious;
+  String message = MojiLines.any(MojiLines.greetings);
 
   int hunger = 28; // 0 = cheio, 100 = faminto
   int energy = 82; // 0 = cansado, 100 = cheio de energia
@@ -31,11 +32,11 @@ class MojiBrain extends ChangeNotifier {
     }
 
     if (hunger > 82) {
-      _setMood(MojiMood.sad, customMessage: 'Estou com fome. Pode me alimentar?');
+      _setMood(MojiMood.sad, customMessage: MojiLines.any(MojiLines.hungry));
     } else if (energy < 18) {
-      _setMood(MojiMood.sleepy, customMessage: 'Minha bateria emocional está baixa.');
+      _setMood(MojiMood.sleepy, customMessage: MojiLines.any(MojiLines.sleep));
     } else if (fun < 18) {
-      _setMood(MojiMood.bored, customMessage: 'Vamos fazer alguma coisa legal?');
+      _setMood(MojiMood.bored, customMessage: MojiLines.any(MojiLines.bored));
     }
 
     _normalize();
@@ -51,11 +52,11 @@ class MojiBrain extends ChangeNotifier {
 
     if (_touchCombo >= 5) {
       _touchCombo = 0;
-      _setMood(MojiMood.angry, customMessage: 'Calma! Foi carinho demais de uma vez.');
+      _setMood(MojiMood.angry, customMessage: MojiLines.any(MojiLines.angry));
     } else if (affection > 82) {
-      _setMood(MojiMood.love);
+      _setMood(MojiMood.love, customMessage: MojiLines.any(MojiLines.happy));
     } else {
-      _setMood(MojiMood.happy, customMessage: 'Carinho recebido!');
+      _setMood(MojiMood.happy, customMessage: MojiLines.any(MojiLines.happy));
     }
 
     _normalize();
@@ -66,7 +67,7 @@ class MojiBrain extends ChangeNotifier {
     fun += 3;
     energy -= 2;
     final reactions = <MojiMood>[MojiMood.curious, MojiMood.angry, MojiMood.excited];
-    _setMood(reactions[_random.nextInt(reactions.length)], customMessage: 'Você cutucou o MOJI!');
+    _setMood(reactions[_random.nextInt(reactions.length)], customMessage: MojiLines.any(MojiLines.poke));
     _gainXp(2);
     _normalize();
     notifyListeners();
@@ -76,7 +77,7 @@ class MojiBrain extends ChangeNotifier {
     hunger -= 28;
     energy += 4;
     affection += 3;
-    _setMood(MojiMood.happy, customMessage: 'Nhac! Isso estava bom.');
+    _setMood(MojiMood.happy, customMessage: MojiLines.any(MojiLines.food));
     _gainXp(8);
     _normalize();
     notifyListeners();
@@ -87,7 +88,10 @@ class MojiBrain extends ChangeNotifier {
     energy -= 16;
     hunger += 8;
     affection += 7;
-    _setMood(energy > 18 ? MojiMood.excited : MojiMood.sleepy);
+    _setMood(
+      energy > 18 ? MojiMood.excited : MojiMood.sleepy,
+      customMessage: energy > 18 ? MojiLines.any(MojiLines.play) : MojiLines.any(MojiLines.sleep),
+    );
     _gainXp(10);
     _normalize();
     notifyListeners();
@@ -97,22 +101,14 @@ class MojiBrain extends ChangeNotifier {
     energy += 34;
     hunger += 3;
     fun -= 2;
-    _setMood(MojiMood.sleepy, customMessage: 'Vou descansar um pouquinho.');
+    _setMood(MojiMood.sleepy, customMessage: MojiLines.any(MojiLines.sleep));
     _gainXp(3);
     _normalize();
     notifyListeners();
   }
 
   void talk() {
-    final messages = <String>[
-      'Eu gosto quando você volta para me ver.',
-      'Hoje eu quero aprender uma coisa nova.',
-      'Você pode me ensinar um comando novo depois.',
-      'Meu sonho é ter várias expressões diferentes.',
-      'Toca na minha cabeça para eu ficar feliz.',
-    ];
-
-    _setMood(MojiMood.curious, customMessage: messages[_random.nextInt(messages.length)]);
+    _setMood(MojiMood.curious, customMessage: MojiLines.any(MojiLines.talk));
     affection += 3;
     _gainXp(4);
     _normalize();
@@ -122,7 +118,7 @@ class MojiBrain extends ChangeNotifier {
   void shakeReaction() {
     final reactions = <MojiMood>[MojiMood.angry, MojiMood.sad, MojiMood.excited];
     final reaction = reactions[_random.nextInt(reactions.length)];
-    _setMood(reaction, customMessage: 'Opa! Senti um impacto no mundo do MOJI.');
+    _setMood(reaction, customMessage: MojiLines.any(MojiLines.impact));
     energy -= 5;
     fun += 4;
     _normalize();
