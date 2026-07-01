@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../services/moji_speech_service.dart';
 import '../domain/moji_brain.dart';
 import '../domain/moji_mood.dart';
 import '../widgets/moji_action_button.dart';
@@ -18,18 +19,50 @@ class MojiHomePage extends StatefulWidget {
 
 class _MojiHomePageState extends State<MojiHomePage> {
   late final MojiBrain _brain;
+  late final MojiSpeechService _speech;
   Timer? _lifeTimer;
+  String? _lastSpokenMessage;
+  bool _voiceEnabled = true;
 
   @override
   void initState() {
     super.initState();
     _brain = MojiBrain();
+    _speech = MojiSpeechService();
+    _brain.addListener(_speakCurrentMessage);
     _lifeTimer = Timer.periodic(const Duration(seconds: 6), (_) => _brain.tick());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _speakCurrentMessage();
+    });
+  }
+
+  Future<void> _speakCurrentMessage() async {
+    if (!_voiceEnabled) return;
+    if (_lastSpokenMessage == _brain.message) return;
+
+    _lastSpokenMessage = _brain.message;
+    await _speech.speak(_brain.message);
+  }
+
+  Future<void> _toggleVoice() async {
+    setState(() {
+      _voiceEnabled = !_voiceEnabled;
+    });
+
+    if (_voiceEnabled) {
+      _lastSpokenMessage = null;
+      await _speakCurrentMessage();
+    } else {
+      await _speech.stop();
+    }
   }
 
   @override
   void dispose() {
     _lifeTimer?.cancel();
+    _brain.removeListener(_speakCurrentMessage);
+    _speech.stop();
     _brain.dispose();
     super.dispose();
   }
@@ -55,7 +88,11 @@ class _MojiHomePageState extends State<MojiHomePage> {
               ),
               child: Column(
                 children: [
-                  _Header(brain: _brain),
+                  _Header(
+                    brain: _brain,
+                    voiceEnabled: _voiceEnabled,
+                    onToggleVoice: _toggleVoice,
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(18, 4, 18, 10),
@@ -104,9 +141,15 @@ class _MojiHomePageState extends State<MojiHomePage> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.brain});
+  const _Header({
+    required this.brain,
+    required this.voiceEnabled,
+    required this.onToggleVoice,
+  });
 
   final MojiBrain brain;
+  final bool voiceEnabled;
+  final VoidCallback onToggleVoice;
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +198,12 @@ class _Header extends StatelessWidget {
               ],
             ),
           ),
+          IconButton.filledTonal(
+            tooltip: voiceEnabled ? 'Desligar voz' : 'Ligar voz',
+            onPressed: onToggleVoice,
+            icon: Icon(voiceEnabled ? Icons.volume_up_rounded : Icons.volume_off_rounded),
+          ),
+          const SizedBox(width: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
