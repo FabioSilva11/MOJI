@@ -16,7 +16,7 @@ class MojiCharacterAnim extends StatelessWidget {
       duration: animation.profile.duration,
       child: old.MojiCharacter(
         key: ValueKey('${mood.name}-${animation.name}'),
-        mood: mood == MojiMood.dizzy ? MojiMood.excited : mood,
+        mood: mood,
       ),
     );
   }
