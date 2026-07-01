@@ -8,6 +8,7 @@ enum MojiMood {
   curious,
   bored,
   love,
+  dizzy,
 }
 
 extension MojiMoodText on MojiMood {
@@ -31,6 +32,8 @@ extension MojiMoodText on MojiMood {
         return 'Entediado';
       case MojiMood.love:
         return 'Carinhoso';
+      case MojiMood.dizzy:
+        return 'Tonto';
     }
   }
 
@@ -54,6 +57,8 @@ extension MojiMoodText on MojiMood {
         return 'Estou precisando de atenção.';
       case MojiMood.love:
         return 'Gosto muito quando você cuida de mim.';
+      case MojiMood.dizzy:
+        return 'Uau... fiquei meio tonto.';
     }
   }
 }
