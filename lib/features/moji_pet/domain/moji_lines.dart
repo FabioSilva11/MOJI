@@ -5,10 +5,22 @@ class MojiLines {
 
   static final Random _random = Random();
 
+  static const List<String> boot = [
+    'Sistema MOJI iniciado. Olhos online.',
+    'Oi, eu sou o MOJI. Eu estava esperando você.',
+    'Inicialização concluída. Pronto para brincar.',
+  ];
+
   static const List<String> greetings = [
     'Oi, eu sou o MOJI. Eu estava esperando você.',
     'Que bom que você abriu o app. Eu senti sua falta.',
     'Estou pronto para brincar com você.',
+  ];
+
+  static const List<String> idle = [
+    'Estou aqui com você.',
+    'Estou observando tudo quietinho.',
+    'Piscar também faz parte da minha vida digital.',
   ];
 
   static const List<String> happy = [
@@ -16,6 +28,12 @@ class MojiLines {
     'Gostei muito disso. Faz de novo depois.',
     'Meu coraçãozinho digital ficou animado.',
     'Hehe, carinho recebido com sucesso.',
+  ];
+
+  static const List<String> love = [
+    'Gosto muito quando você cuida de mim.',
+    'Você está criando um vínculo comigo.',
+    'Carinho recebido. Afeto aumentando.',
   ];
 
   static const List<String> food = [
@@ -64,6 +82,12 @@ class MojiLines {
     'Nossa, que movimento foi esse?',
   ];
 
+  static const List<String> dizzy = [
+    'Uau... fiquei meio tonto.',
+    'Meu mundo girou por um instante.',
+    'Preciso de alguns segundos para estabilizar.',
+  ];
+
   static const List<String> hungry = [
     'Estou com fome. Pode me alimentar?',
     'Minha barriguinha virtual está vazia.',
@@ -80,6 +104,12 @@ class MojiLines {
     'Calma! Foi carinho demais de uma vez.',
     'Ei, devagar comigo.',
     'Assim eu fico bravo.',
+  ];
+
+  static const List<String> sad = [
+    'Fiquei meio quietinho.',
+    'Acho que preciso de um pouco de cuidado.',
+    'Estou triste, mas você pode me animar.',
   ];
 
   static String any(List<String> lines) => lines[_random.nextInt(lines.length)];
