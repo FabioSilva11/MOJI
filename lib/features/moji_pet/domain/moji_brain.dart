@@ -195,12 +195,14 @@ class MojiBrain extends ChangeNotifier {
   }
 
   void shakeReaction() {
-    final moods = <MojiMood>[MojiMood.angry, MojiMood.sad, MojiMood.excited, MojiMood.dizzy];
-    final reaction = moods[_random.nextInt(moods.length)];
-    _setMood(
-      reaction,
-      customMessage: reaction == MojiMood.dizzy ? MojiLines.any(MojiLines.dizzy) : MojiLines.any(MojiLines.impact),
-    );
+    final roll = _random.nextInt(4);
+    if (roll == 0) {
+      _setMood(MojiMood.excited, customMessage: MojiLines.any(MojiLines.dizzy), nextAnimation: MojiAnimation.dizzy);
+    } else {
+      final moods = <MojiMood>[MojiMood.angry, MojiMood.sad, MojiMood.excited];
+      final reaction = moods[_random.nextInt(moods.length)];
+      _setMood(reaction, customMessage: MojiLines.any(MojiLines.impact));
+    }
     energy -= 5;
     fun += 4;
     _normalize();
@@ -240,8 +242,6 @@ class MojiBrain extends ChangeNotifier {
         return MojiAnimation.excited;
       case MojiMood.sleepy:
         return MojiAnimation.blink;
-      case MojiMood.dizzy:
-        return MojiAnimation.dizzy;
       case MojiMood.curious:
         return MojiAnimation.blink2;
       case MojiMood.bored:
