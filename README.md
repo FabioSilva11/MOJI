@@ -1,12 +1,15 @@
 # MOJI Pet — Flutter MVP
 
-MOJI é um pet virtual em Flutter inspirado na lógica de um robô companheiro: ele pisca, muda de humor, reage a toque, fica com fome, perde energia, ganha carinho e evolui de nível.
+MOJI é um pet virtual em Flutter inspirado na lógica de um robô companheiro: ele pisca, muda de humor, reage a toque, fica com fome, perde energia, ganha carinho, fala em português e evolui de nível.
 
 Este MVP não usa hardware. A ideia é transformar a lógica de um robô físico em um app 100% virtual.
 
 ## O que já vem pronto
 
 - Personagem MOJI desenhado com `CustomPainter`, sem depender de imagens externas.
+- Voz em português do Brasil usando `flutter_tts`.
+- Falas contextuais para toque, cutucada, comida, brincadeira, sono, impacto, fome e conversa.
+- Botão de ligar/desligar voz no topo da tela.
 - Sistema de humor:
   - neutro
   - feliz
@@ -30,6 +33,12 @@ Este MVP não usa hardware. A ideia é transformar a lógica de um robô físico
   - arrastar verticalmente: simular impacto/reação
   - botões para comida, brincar, dormir e falar
 
+## Sobre sons do projeto EMO open-source usado como referência
+
+A referência open-source `CodersCafeTech/Emo` chama arquivos `.wav` locais em `/home/pi/Desktop/EmoBot/sound/<emocao>.wav`, mas esses arquivos de áudio não estão incluídos no repositório público. Por isso o MOJI usa voz TTS própria e falas novas, em vez de copiar áudio protegido ou ausente.
+
+A licença da referência é CC BY-NC 4.0, então qualquer uso direto daquele material deve manter atribuição e não pode ser comercial.
+
 ## Como rodar
 
 Se você ainda não criou as plataformas Android/iOS/Web, entre na pasta do projeto e rode:
@@ -47,10 +56,13 @@ Se o Flutter perguntar se deve sobrescrever arquivos, preserve a pasta `lib/` e 
 ```text
 lib/
 ├── main.dart
+├── services/
+│   └── moji_speech_service.dart
 └── features/
     └── moji_pet/
         ├── domain/
         │   ├── moji_brain.dart
+        │   ├── moji_lines.dart
         │   └── moji_mood.dart
         ├── presentation/
         │   └── moji_home_page.dart
@@ -64,16 +76,17 @@ lib/
 ## Próximos passos recomendados
 
 1. Adicionar persistência local para salvar fome, energia, nível e última interação.
-2. Adicionar sons curtos para cada emoção.
+2. Adicionar efeitos sonoros originais próprios para cada emoção.
 3. Criar animações mais avançadas com Rive, Lottie ou sprites.
 4. Adicionar sensor de movimento real com `sensors_plus` para detectar quando o usuário chacoalha o celular.
-5. Adicionar modo conversa com IA.
+5. Adicionar modo conversa com IA real via API configurável.
 6. Adicionar loja de acessórios visuais para o MOJI.
 7. Adicionar notificações: “MOJI está com fome”, “MOJI quer brincar”.
 
 ## Identidade visual
 
 O MOJI deve ter identidade própria. Ele pode ser inspirado na ideia de um pet robô emocional, mas evite copiar nome, artes, sons e elementos protegidos de produtos comerciais existentes.
+
 ## GitHub Actions / APK automático
 
 Este repositório já inclui o workflow `.github/workflows/android-release.yml`.
@@ -95,4 +108,3 @@ git push origin v0.1.0
 ```
 
 Também dá para ir em **Actions → Build Android APK → Run workflow** para gerar uma release de build.
-
