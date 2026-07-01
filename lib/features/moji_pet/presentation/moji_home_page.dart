@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../services/moji_memory_service.dart';
 import '../../../services/moji_speech_service.dart';
 import '../domain/moji_brain.dart';
 import '../domain/moji_mood.dart';
@@ -20,7 +21,9 @@ class MojiHomePage extends StatefulWidget {
 class _MojiHomePageState extends State<MojiHomePage> {
   late final MojiBrain _brain;
   late final MojiSpeechService _speech;
+  late final MojiMemoryService _memory;
   Timer? _lifeTimer;
+  Timer? _saveTimer;
   String? _lastSpokenMessage;
   bool _voiceEnabled = true;
 
@@ -29,11 +32,21 @@ class _MojiHomePageState extends State<MojiHomePage> {
     super.initState();
     _brain = MojiBrain();
     _speech = MojiSpeechService();
-    _brain.addListener(_speakCurrentMessage);
+    _memory = MojiMemoryService();
+    _brain.addListener(_onBrainChanged);
     _lifeTimer = Timer.periodic(const Duration(seconds: 6), (_) => _brain.tick());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _speakCurrentMessage();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _brain.restore(_memory);
+      await _speakCurrentMessage();
+    });
+  }
+
+  void _onBrainChanged() {
+    _speakCurrentMessage();
+    _saveTimer?.cancel();
+    _saveTimer = Timer(const Duration(milliseconds: 700), () {
+      _brain.save(_memory);
     });
   }
 
@@ -61,7 +74,9 @@ class _MojiHomePageState extends State<MojiHomePage> {
   @override
   void dispose() {
     _lifeTimer?.cancel();
-    _brain.removeListener(_speakCurrentMessage);
+    _saveTimer?.cancel();
+    _brain.save(_memory);
+    _brain.removeListener(_onBrainChanged);
     _speech.stop();
     _brain.dispose();
     super.dispose();
@@ -109,7 +124,10 @@ class _MojiHomePageState extends State<MojiHomePage> {
                               onVerticalDragEnd: (_) => _brain.shakeReaction(),
                               child: Hero(
                                 tag: 'moji-character',
-                                child: MojiCharacter(mood: _brain.mood),
+                                child: MojiCharacter(
+                                  mood: _brain.mood,
+                                  animation: _brain.animation,
+                                ),
                               ),
                             ),
                           ),
@@ -118,7 +136,7 @@ class _MojiHomePageState extends State<MojiHomePage> {
                           _ActionPanel(brain: _brain),
                           const SizedBox(height: 8),
                           Text(
-                            'Toque no MOJI para carinho • duplo toque para cutucar • arraste para simular impacto',
+                            'Toque: carinho • duplo toque: cutucar • arraste: impacto • toque longo: fala contextual',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.55),
@@ -189,7 +207,7 @@ class _Header extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Pet virtual • Humor: ${brain.mood.label}',
+                  'Humor: ${brain.mood.label} • Animação: ${brain.animation.profile.name}',
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.68),
                     fontWeight: FontWeight.w700,
