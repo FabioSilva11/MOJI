@@ -106,7 +106,7 @@ class _MojiCharacterMotionState extends State<MojiCharacterMotion> with SingleTi
     switch (animation) {
       case MojiAnimation.bootup3:
         return _MojiMotion(
-          dy: (1 - t) * 50,
+          dy: 0,
           scale: 0.72 + t * 0.28,
           angle: math.sin(t * math.pi * 6) * 0.025,
           glow: 0.28,
@@ -118,23 +118,23 @@ class _MojiCharacterMotionState extends State<MojiCharacterMotion> with SingleTi
           textSize: 16,
         );
       case MojiAnimation.neutral:
-        return _MojiMotion(dy: wave * 4, glow: 0.12, blur: 30, spread: 2, color: const Color(0xFF22D3EE));
+        return const _MojiMotion(glow: 0.12, blur: 30, spread: 2, color: Color(0xFF22D3EE));
       case MojiAnimation.blink:
-        return _MojiMotion(scale: frame % 39 < 8 ? 0.94 : 1, dy: wave * 2, color: const Color(0xFF22D3EE));
+        return _MojiMotion(scale: frame % 39 < 8 ? 0.94 : 1, color: const Color(0xFF22D3EE));
       case MojiAnimation.blink2:
-        return _MojiMotion(scale: frame % 20 > 14 ? 0.92 : 1, dy: wave * 3, glow: 0.10, blur: 22, spread: 1, color: const Color(0xFF38BDF8));
+        return _MojiMotion(scale: frame % 20 > 14 ? 0.92 : 1, glow: 0.10, blur: 22, spread: 1, color: const Color(0xFF38BDF8));
       case MojiAnimation.happy:
-        return _MojiMotion(dy: wave * 12, angle: wave * 0.035, glow: 0.22, blur: 38, spread: 4, color: const Color(0xFF22D3EE));
+        return _MojiMotion(dy: -math.sin(t * math.pi) * 18, angle: wave * 0.025, glow: 0.22, blur: 38, spread: 4, color: const Color(0xFF22D3EE));
       case MojiAnimation.happy2:
         return _MojiMotion(dy: -math.sin(t * math.pi) * 24, scale: 1 + math.sin(t * math.pi) * 0.08, glow: 0.22, blur: 42, spread: 5, color: const Color(0xFF7C3AED), text: '+XP', textDy: -t * 30);
       case MojiAnimation.happy3:
-        return _MojiMotion(dy: wave * 7, scale: 1 + wave.abs() * 0.05, angle: wave * 0.025, glow: 0.26, blur: 44, spread: 6, color: const Color(0xFFFF5CA8), text: 'LOVE', textDy: -math.sin(t * math.pi) * 18, textSize: 16);
+        return _MojiMotion(scale: 1 + wave.abs() * 0.05, angle: wave * 0.02, glow: 0.26, blur: 44, spread: 6, color: const Color(0xFFFF5CA8), text: 'LOVE', textDy: -math.sin(t * math.pi) * 18, textSize: 16);
       case MojiAnimation.sad:
-        return _MojiMotion(dy: 18 + math.sin(t * math.pi) * 3, angle: -0.04, scale: 0.96, glow: 0.12, blur: 26, spread: 1, color: const Color(0xFF60A5FA));
+        return const _MojiMotion(angle: -0.04, scale: 0.96, glow: 0.12, blur: 26, spread: 1, color: Color(0xFF60A5FA));
       case MojiAnimation.dizzy:
-        return _MojiMotion(dx: wave * 12, dy: math.cos(t * math.pi * 2) * 6, angle: wave * 0.16, scale: 1 + wave.abs() * 0.04, glow: 0.22, blur: 34, spread: 4, color: const Color(0xFFFBBF24), text: '???', textDy: wave * 8, textSize: 16);
+        return _MojiMotion(dx: wave * 12, angle: wave * 0.16, scale: 1 + wave.abs() * 0.04, glow: 0.22, blur: 34, spread: 4, color: const Color(0xFFFBBF24), text: '???', textDy: wave * 8, textSize: 16);
       case MojiAnimation.excited:
-        return _MojiMotion(dy: wave * 16, angle: wave * 0.07, scale: 1 + wave.abs() * 0.07, glow: 0.28, blur: 48, spread: 7, color: const Color(0xFF34D399), text: 'WOW', textDy: -math.sin(t * math.pi) * 24, textSize: 15);
+        return _MojiMotion(dy: -math.sin(t * math.pi) * 26, angle: wave * 0.05, scale: 1 + wave.abs() * 0.07, glow: 0.28, blur: 48, spread: 7, color: const Color(0xFF34D399), text: 'WOW', textDy: -math.sin(t * math.pi) * 24, textSize: 15);
       case MojiAnimation.angry:
         return _MojiMotion(dx: frame.isEven ? -8 : 8, angle: frame.isEven ? -0.055 : 0.055, glow: 0.30, blur: 36, spread: 4, color: const Color(0xFFFF4D6D), text: '!', textDy: -math.sin(t * math.pi) * 18, textSize: 24);
     }
