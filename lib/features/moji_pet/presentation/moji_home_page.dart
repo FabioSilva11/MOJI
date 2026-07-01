@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../services/moji_memory_service.dart';
 import '../../../services/moji_speech_service.dart';
+import '../domain/moji_animation.dart';
 import '../domain/moji_brain.dart';
 import '../domain/moji_mood.dart';
 import '../widgets/moji_action_button.dart';
