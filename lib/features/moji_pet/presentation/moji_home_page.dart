@@ -7,7 +7,7 @@ import '../../../services/moji_speech_service.dart';
 import '../domain/moji_brain.dart';
 import '../domain/moji_mood.dart';
 import '../widgets/moji_action_button.dart';
-import '../widgets/moji_character.dart';
+import '../widgets/moji_character_anim.dart';
 import '../widgets/moji_dialog_bubble.dart';
 import '../widgets/moji_stat_bar.dart';
 
@@ -124,7 +124,7 @@ class _MojiHomePageState extends State<MojiHomePage> {
                               onVerticalDragEnd: (_) => _brain.shakeReaction(),
                               child: Hero(
                                 tag: 'moji-character',
-                                child: MojiCharacter(
+                                child: MojiCharacterAnim(
                                   mood: _brain.mood,
                                   animation: _brain.animation,
                                 ),
