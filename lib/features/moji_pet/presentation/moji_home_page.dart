@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../domain/moji_brain.dart';
+import '../domain/moji_mood.dart';
 import '../widgets/moji_action_button.dart';
 import '../widgets/moji_character.dart';
 import '../widgets/moji_dialog_bubble.dart';
